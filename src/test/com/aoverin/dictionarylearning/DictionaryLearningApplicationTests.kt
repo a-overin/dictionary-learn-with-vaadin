@@ -1,0 +1,13 @@
+package com.aoverin.dictionarylearning
+
+import org.junit.jupiter.api.Test
+import org.springframework.boot.test.context.SpringBootTest
+
+@SpringBootTest
+class DictionaryLearningApplicationTests {
+
+	@Test
+	fun contextLoads() {
+	}
+
+}
