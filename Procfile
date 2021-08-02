@@ -1,0 +1,1 @@
+web: java -jar target/dictionary-learning-0.0.1-SNAPSHOT.jar $PORT
