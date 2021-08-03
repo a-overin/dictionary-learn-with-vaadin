@@ -1,0 +1,22 @@
+.game-view {
+  display: block;
+  padding: 1em;
+}
+
+.column-layout {
+  width: max-content;
+}
+
+.v-drag-over-target {
+  outline: 1px solid lightgreen;
+}
+
+.possible-drop-zone{
+  opacity: 0.5;
+  outline: 1px solid lightgreen;
+  color: white
+}
+
+.finished-dropped {
+  outline: 1px solid black;
+}

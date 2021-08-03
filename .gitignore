@@ -76,7 +76,7 @@ fabric.properties
 ### JetBrains Patch ###
 # Comment Reason: https://github.com/joeblau/gitignore.io/issues/186#issuecomment-215987721
 
-# *.iml
+*.iml
 # modules.xml
 # .idea/misc.xml
 # *.ipr
@@ -121,8 +121,13 @@ application-dev.properties
 hs_err_pid*
 
 # node
-node_modules
-
-webpack.*
-
+webpack.generated.js
+error-screenshots/
 package-lock.json
+# The following files are generated/updated by vaadin-maven-plugin
+node_modules/
+frontend/generated/
+pnpmfile.js
+
+# Browser drivers for local integration tests
+drivers/
