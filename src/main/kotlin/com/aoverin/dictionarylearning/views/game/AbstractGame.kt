@@ -100,6 +100,7 @@ abstract class AbstractGame(
                 langType = false
             }
             isVisible = false
+            addClassName(checkButtonClass)
         }
         layout.add(comboBox, button, buttonLangFirst, buttonLangSecond)
         for (i in 0 until layout.componentCount) {

@@ -11,7 +11,7 @@
 	<properties>
 		<java.version>11</java.version>
 		<kotlin.version>1.5.21</kotlin.version>
-		<vaadin.version>21.0.0.alpha10</vaadin.version>
+		<vaadin.version>22.0.0.alpha1</vaadin.version>
 	</properties>
 
 	<parent>
