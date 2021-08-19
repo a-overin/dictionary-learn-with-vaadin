@@ -27,7 +27,7 @@ import com.vaadin.flow.server.auth.AccessAnnotationChecker
 import java.util.*
 
 @PageTitle("Main")
-open class MainLayout(authenticatedUser: AuthenticatedUser, accessChecker: AccessAnnotationChecker) :
+class MainLayout(authenticatedUser: AuthenticatedUser, accessChecker: AccessAnnotationChecker) :
     AppLayout() {
     class MenuItemInfo(val text: String, val iconClass: String, val view: Class<out Component>)
 

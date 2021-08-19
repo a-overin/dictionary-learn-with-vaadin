@@ -5,6 +5,7 @@ import com.vaadin.flow.component.ClickEvent
 import com.vaadin.flow.component.KeyEventListener
 import com.vaadin.flow.component.Text
 import com.vaadin.flow.component.button.Button
+import com.vaadin.flow.component.combobox.ComboBox
 import com.vaadin.flow.component.dialog.Dialog
 import com.vaadin.flow.component.notification.Notification
 import com.vaadin.flow.component.orderedlayout.FlexComponent
@@ -27,7 +28,6 @@ class MainView : HorizontalLayout() {
 
     init {
         buttons = mutableListOf()
-        val verticalLayout = VerticalLayout()
         addClassName("main-view")
         name = TextField("Your name")
         val helloButton = Button("Say hello")
@@ -39,7 +39,6 @@ class MainView : HorizontalLayout() {
         }
         buttons.add(helloButton)
         add(name, *buttons.toTypedArray())
-        setVerticalComponentAlignment(FlexComponent.Alignment.END, name, helloButton)
     }
 
     private fun getButton(name: String) {

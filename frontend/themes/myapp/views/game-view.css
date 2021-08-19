@@ -3,8 +3,12 @@
   padding: 1em;
 }
 
-.column-layout {
-  width: max-content;
+.bordered-button {
+  outline: 1px solid lightgreen;
+}
+
+.target-words-list {
+  font-weight: bold;
 }
 
 .v-drag-over-target {

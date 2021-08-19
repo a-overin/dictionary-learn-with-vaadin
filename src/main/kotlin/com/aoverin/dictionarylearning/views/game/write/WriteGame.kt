@@ -1,35 +1,36 @@
 package com.aoverin.dictionarylearning.views.game.write
 
+import com.aoverin.dictionarylearning.services.WordsPackService
+import com.aoverin.dictionarylearning.views.MainLayout
 import com.aoverin.dictionarylearning.views.game.AbstractGame
-import com.aoverin.dictionarylearning.views.game.GameLayout
-import com.google.common.collect.ImmutableList
-import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.dnd.DragSource
 import com.vaadin.flow.component.dnd.DropEffect
 import com.vaadin.flow.component.dnd.DropTarget
 import com.vaadin.flow.component.dnd.EffectAllowed
 import com.vaadin.flow.component.html.Span
+import com.vaadin.flow.component.icon.Icon
+import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
+import com.vaadin.flow.component.orderedlayout.VerticalLayout
+import com.vaadin.flow.router.PageTitle
 import com.vaadin.flow.router.Route
+import kotlin.properties.Delegates
+import kotlin.streams.toList
 
-@Route(value = "write", layout = GameLayout::class)
-class WriteGame : AbstractGame() {
+@PageTitle("Write game")
+@Route(value = "write", layout = MainLayout::class)
+class WriteGame(
+    wordsPackService: WordsPackService
+) : AbstractGame(wordsPackService) {
 
-    private val targetsWords: List<DropTarget<Component>>
+    private lateinit var sourceWords: List<String>
+    private lateinit var targetWords: List<String>
+    private lateinit var horizontalLayout: HorizontalLayout
+    private var wordsCount by Delegates.notNull<Int>()
 
-    private val sourceWords: List<DragSource<Component>>
-
-    init {
-        targetsWords = mutableListOf()
-        sourceWords = mutableListOf()
-        add(createTargetWordsLayout())
-        add(createEmptyLayout(getTargetWords().count()))
-        add(createSourceWordsLayout())
-    }
-
-    private fun createEmptyLayout(wordsCount: Int): HorizontalLayout {
-        val layout = HorizontalLayout()
-        for (i in 1..wordsCount) {
+    private fun createEmptyLayout(): VerticalLayout {
+        val layout = VerticalLayout()
+        for (i in 1..targetWords.count()) {
             val span = Span("empty")
             val dropTarget: DropTarget<Span> = DropTarget.create(span)
             dropTarget.dropEffect = DropEffect.MOVE
@@ -50,16 +51,17 @@ class WriteGame : AbstractGame() {
         return layout
     }
 
-    private fun createTargetWordsLayout() : HorizontalLayout {
-        val layout = HorizontalLayout()
-        getTargetWords()
+    private fun createTargetWordsLayout() : VerticalLayout {
+        val layout = VerticalLayout()
+        layout.addClassName("target-words-list")
+        targetWords
             .forEach{ layout.add(Span(it)) }
         return layout
     }
 
-    private fun createSourceWordsLayout() : HorizontalLayout {
-        val layout = HorizontalLayout()
-        getSourceWords()
+    private fun createSourceWordsLayout() : VerticalLayout {
+        val layout = VerticalLayout()
+        sourceWords
             .map { it ->
                 val span = Span(it)
                 val dragSource = DragSource.create(span)
@@ -67,8 +69,6 @@ class WriteGame : AbstractGame() {
                 dragSource.addDragEndListener{
                     if (it.isSuccessful) {
                         dragSource.isDraggable = false
-//                        dragSource.dragSourceComponent.isVisible = false
-                        println("good $dragSource")
                     }
                 }
                 span
@@ -77,11 +77,68 @@ class WriteGame : AbstractGame() {
         return layout
     }
 
-    private fun getTargetWords(): List<String> {
-        return ImmutableList.of("раз", "два", "три")
+    override fun hideComponents() {
+        if (this::horizontalLayout.isInitialized) {
+            remove(horizontalLayout)
+        }
     }
 
-    private fun getSourceWords(): List<String> {
-        return ImmutableList.of("one", "two", "three")
+    override fun disableComponents() {
+        horizontalLayout.isEnabled = false
+    }
+
+    override fun initComponents(words: List<Pair<String, String>>) {
+        wordsCount = words.count()
+        targetWords = words
+            .stream()
+            .map { e -> e.first }
+            .toList()
+        sourceWords = words
+            .stream()
+            .map { e -> e.second }
+            .toList()
+        val targetWordsLayout = createTargetWordsLayout()
+        val emptyWordsLayout = createEmptyLayout()
+        val sourceWordsLayout = createSourceWordsLayout()
+        horizontalLayout = HorizontalLayout().apply {
+            add(targetWordsLayout)
+            add(emptyWordsLayout)
+            add(sourceWordsLayout)
+            isEnabled = true
+        }
+        add(horizontalLayout)
+    }
+
+    override fun showResult() {
+        val zeroComp = horizontalLayout.getComponentAt(0) as VerticalLayout
+        val oneComp = horizontalLayout.getComponentAt(1) as VerticalLayout
+        val errorElements = checkResultAndReturnErrorElementNumber(
+            getListStringFromElements(zeroComp) zip getListStringFromElements(oneComp)
+        )
+        drawResult(errorElements)
+    }
+
+    private fun getListStringFromElements(verticalLayout: VerticalLayout): List<String> {
+        val stringList = mutableListOf<String>()
+        for (i in 0 until verticalLayout.componentCount) {
+            val comp = verticalLayout.getComponentAt(i)
+            if (comp is Span) {
+                stringList.add(comp.text)
+            }
+        }
+        return stringList
+    }
+
+    private fun drawResult(list: List<Int>) {
+        val layout = VerticalLayout().apply {
+            for (i in 0 until wordsCount) {
+                if (i in list) {
+                    add(Icon(VaadinIcon.CLOSE_SMALL).apply { color = "red" })
+                } else {
+                    add(Icon(VaadinIcon.CHECK).apply { color = "green" })
+                }
+            }
+        }
+        horizontalLayout.add(layout)
     }
 }
