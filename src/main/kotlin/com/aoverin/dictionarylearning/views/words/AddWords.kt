@@ -1,4 +1,4 @@
-package com.aoverin.dictionarylearning.views.addwords
+package com.aoverin.dictionarylearning.views.words
 
 import com.aoverin.dictionarylearning.components.combobox.getComboBoxForItems
 import com.aoverin.dictionarylearning.models.Word
