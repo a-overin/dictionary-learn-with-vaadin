@@ -15,10 +15,10 @@ import com.vaadin.flow.router.PageTitle
 import com.vaadin.flow.router.Route
 import javax.annotation.security.RolesAllowed
 
-@PageTitle("Add Words")
-@Route(value = "add-words", layout = MainLayout::class)
+@PageTitle("Edit Words")
+@Route(value = "edit-words", layout = MainLayout::class)
 @RolesAllowed("admin")
-class AddWords(
+class EditWordsView(
     private val wordsService: WordsService
 ) : VerticalLayout() {
 
@@ -45,13 +45,15 @@ class AddWords(
                         addClickListener { addAndConnect(lang1.value, word1.value, lang2.value, word2.value) }
                         word1.clear()
                         word2.clear()
+                        isDisableOnClick = true
                     }
                 )
                 add(lang2)
                 add(word2)
-                for (i in 0 until componentCount) {
-                    setVerticalComponentAlignment(FlexComponent.Alignment.BASELINE, getComponentAt(i))
-                }
+                defaultVerticalComponentAlignment = FlexComponent.Alignment.BASELINE
+//                for (i in 0 until componentCount) {
+//                    setVerticalComponentAlignment(FlexComponent.Alignment.BASELINE, getComponentAt(i))
+//                }
             }
     }
 
@@ -82,6 +84,7 @@ class AddWords(
                             connectWords(word1.value, word2.value)
                             word1.clear()
                             word2.clear()
+                            isDisableOnClick = true
                         }
                     }
                 )
@@ -105,6 +108,7 @@ class AddWords(
                         addClickListener {
                             wordsService.add(wordsField.value, langComboBox.value)
                             wordsField.clear()
+                            isDisableOnClick = true
                         }
                     }
                 )

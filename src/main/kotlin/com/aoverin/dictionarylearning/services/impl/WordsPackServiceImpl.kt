@@ -29,4 +29,12 @@ class WordsPackServiceImpl : WordsPackService {
             )
         )
     }
+
+    override fun addWordsToPack(packId: Int, word1Id: Int, words2Id: Int) {
+
+    }
+
+    override fun removeWordsFromPack(packId: Int, word1Id: Int, words2Id: Int) {
+
+    }
 }
