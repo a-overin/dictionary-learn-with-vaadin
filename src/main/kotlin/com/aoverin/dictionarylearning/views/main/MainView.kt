@@ -1,26 +1,20 @@
 package com.aoverin.dictionarylearning.views.main
 
 import com.aoverin.dictionarylearning.views.MainLayout
-import com.vaadin.flow.component.ClickEvent
-import com.vaadin.flow.component.KeyEventListener
 import com.vaadin.flow.component.Text
 import com.vaadin.flow.component.button.Button
-import com.vaadin.flow.component.combobox.ComboBox
 import com.vaadin.flow.component.dialog.Dialog
 import com.vaadin.flow.component.notification.Notification
-import com.vaadin.flow.component.orderedlayout.FlexComponent
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.router.PageTitle
 import com.vaadin.flow.router.Route
-import com.vaadin.flow.router.RouteAlias
-import com.vaadin.flow.server.auth.AnonymousAllowed
+import javax.annotation.security.RolesAllowed
 
 @PageTitle("Main")
 @Route(value = "main", layout = MainLayout::class)
-@RouteAlias(value = "", layout = MainLayout::class)
-@AnonymousAllowed
+@RolesAllowed("admin")
 class MainView : HorizontalLayout() {
 
     private val name: TextField

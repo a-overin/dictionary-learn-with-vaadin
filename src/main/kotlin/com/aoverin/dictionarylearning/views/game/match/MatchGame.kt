@@ -1,4 +1,4 @@
-package com.aoverin.dictionarylearning.views.game.write
+package com.aoverin.dictionarylearning.views.game.match
 
 import com.aoverin.dictionarylearning.services.WordsPackService
 import com.aoverin.dictionarylearning.views.MainLayout
@@ -17,9 +17,9 @@ import com.vaadin.flow.router.Route
 import kotlin.properties.Delegates
 import kotlin.streams.toList
 
-@PageTitle("Write game")
-@Route(value = "write", layout = MainLayout::class)
-class WriteGame(
+@PageTitle("Match game")
+@Route(value = "match", layout = MainLayout::class)
+class MatchGame(
     wordsPackService: WordsPackService
 ) : AbstractGame(wordsPackService) {
 

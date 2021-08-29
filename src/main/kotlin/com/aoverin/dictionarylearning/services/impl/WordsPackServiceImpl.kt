@@ -1,9 +1,9 @@
-package com.aoverin.dictionarylearning.services
+package com.aoverin.dictionarylearning.services.impl
 
 import com.aoverin.dictionarylearning.models.Word
 import com.aoverin.dictionarylearning.models.WordsForPack
 import com.aoverin.dictionarylearning.models.WordsPack
-import io.swagger.v3.oas.annotations.servers.Server
+import com.aoverin.dictionarylearning.services.WordsPackService
 import org.springframework.stereotype.Service
 
 @Service

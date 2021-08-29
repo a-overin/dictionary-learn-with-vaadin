@@ -1,13 +1,12 @@
-package com.aoverin.dictionarylearning.services
+package com.aoverin.dictionarylearning.services.impl
 
 import com.aoverin.dictionarylearning.models.UserModel
 import com.aoverin.dictionarylearning.models.UserRoles
+import com.aoverin.dictionarylearning.services.UserService
 import com.google.common.collect.ImmutableSet
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
-import java.util.*
 
 @Service
 class UserServiceImpl(

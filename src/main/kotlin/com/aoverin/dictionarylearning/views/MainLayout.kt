@@ -2,7 +2,8 @@ package com.aoverin.dictionarylearning.views
 
 import com.aoverin.dictionarylearning.models.UserModel
 import com.aoverin.dictionarylearning.security.AuthenticatedUser
-import com.aoverin.dictionarylearning.views.game.write.WriteGame
+import com.aoverin.dictionarylearning.views.addwords.AddWords
+import com.aoverin.dictionarylearning.views.game.match.MatchGame
 import com.aoverin.dictionarylearning.views.main.MainView
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.ComponentUtil
@@ -27,12 +28,16 @@ import com.vaadin.flow.server.auth.AccessAnnotationChecker
 import java.util.*
 
 @PageTitle("Main")
-class MainLayout(authenticatedUser: AuthenticatedUser, accessChecker: AccessAnnotationChecker) :
-    AppLayout() {
+class MainLayout(
+    authenticatedUser: AuthenticatedUser,
+    accessChecker: AccessAnnotationChecker,
+    userViews: List<UserView>
+) : AppLayout() {
     class MenuItemInfo(val text: String, val iconClass: String, val view: Class<out Component>)
 
     private val menu: Tabs
     private var viewTitle: H1? = null
+    private val userViews: List<UserView>
     private val authenticatedUser: AuthenticatedUser
     private val accessChecker: AccessAnnotationChecker
     private fun createHeaderContent(): Component {
@@ -93,10 +98,10 @@ class MainLayout(authenticatedUser: AuthenticatedUser, accessChecker: AccessAnno
     }
 
     private fun createMenuItems(): List<Tab> {
-        val menuItems = arrayOf( //
+        val menuItems = arrayOf(
             MenuItemInfo("Main", "la la-globe", MainView::class.java),
-            MenuItemInfo("Write Game", "la la-globe", WriteGame::class.java),
-//            MenuItemInfo("About", "la la-file", AboutView::class.java)
+            MenuItemInfo("Match Game", "la la-globe", MatchGame::class.java),
+            MenuItemInfo("Add Words", "la la-globe", AddWords::class.java)
         )
         val tabs: MutableList<Tab> = ArrayList()
         for (menuItemInfo in menuItems) {
@@ -155,6 +160,7 @@ class MainLayout(authenticatedUser: AuthenticatedUser, accessChecker: AccessAnno
     init {
         this.authenticatedUser = authenticatedUser
         this.accessChecker = accessChecker
+        this.userViews = userViews
         primarySection = Section.DRAWER
         addToNavbar(true, createHeaderContent())
         menu = createMenu()
