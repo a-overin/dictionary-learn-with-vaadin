@@ -53,9 +53,16 @@ class MatchGame(
 
     private fun createTargetWordsLayout() : VerticalLayout {
         val layout = VerticalLayout()
+            .apply {
+                setWidthFull()
+            }
         layout.addClassName("target-words-list")
         targetWords
-            .forEach{ layout.add(Span(it)) }
+            .forEach{ layout.add(
+                Span(it).apply {
+                    setWidthFull()
+                }
+            ) }
         return layout
     }
 
@@ -93,10 +100,12 @@ class MatchGame(
             .stream()
             .map { e -> e.first }
             .toList()
+            .shuffled()
         sourceWords = words
             .stream()
             .map { e -> e.second }
             .toList()
+            .shuffled()
         val targetWordsLayout = createTargetWordsLayout()
         val emptyWordsLayout = createEmptyLayout()
         val sourceWordsLayout = createSourceWordsLayout()

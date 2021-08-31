@@ -1,5 +1,6 @@
 package com.aoverin.dictionarylearning.services
 
+import com.aoverin.dictionarylearning.models.Word
 import com.aoverin.dictionarylearning.models.WordsForPack
 import com.aoverin.dictionarylearning.models.WordsPack
 
@@ -9,7 +10,7 @@ interface WordsPackService {
 
     fun getWordsForPackId(id: Int): WordsForPack
 
-    fun addWordsToPack(packId: Int, word1Id: Int, words2Id: Int)
+    fun addWordsToPack(pack: WordsPack, word1: Word, words2: Word)
 
-    fun removeWordsFromPack(packId: Int, word1Id: Int, words2Id: Int)
+    fun removeWordsFromPack(pack: WordsPack, word1: Word, words2: Word)
 }

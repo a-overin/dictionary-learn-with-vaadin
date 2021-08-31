@@ -77,14 +77,18 @@ class EditPacksView(
     private fun getDeleteButton(pack: WordsPack, word1: Word, word2: Word): Button {
         return Button("Delete")
             .apply {
-                addClickListener { wordsPackService.removeWordsFromPack(pack.id, word1.id, word2.id) }
+                addClickListener { wordsPackService.removeWordsFromPack(pack, word1, word2) }
             }
     }
 
     private fun getAddButton(pack: WordsPack, word1: ComboBox<Word>, word2: ComboBox<Word>): Button {
         return Button("Add")
             .apply {
-                addClickListener { wordsPackService.addWordsToPack(pack.id, word1.value.id, word2.value.id) }
+                addClickListener {
+                    wordsPackService.addWordsToPack(pack, word1.value, word2.value)
+                    initObjects()
+                    updateLabels(pack)
+                }
             }
     }
 
@@ -92,8 +96,7 @@ class EditPacksView(
         removeAll()
         add(packBox)
         add(horizontalLayout)
-        add(addButton
-        )
+        add(addButton)
     }
 
     private fun initAddWordsButton(): Button {
@@ -122,7 +125,6 @@ class EditPacksView(
                                 )
                             }
                     )
-                    this.isEnabled = true
                 }
             }
     }
