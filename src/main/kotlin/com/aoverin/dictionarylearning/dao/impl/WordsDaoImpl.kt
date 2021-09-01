@@ -16,19 +16,32 @@ class WordsDaoImpl(
         private const val SQL_GET_LANG = "select * from languages"
         private const val SQL_GET_WORDS_BY_LANG = "select * from words where lang = :lang"
         private const val SQL_GET_WORDS_BY_ID = "select * from words where id = :id"
+        private const val SQL_GET_WORD_BY_VALUE = "select id from words where word = :word and lang = :lang"
     }
 
     override fun add(value: String, lang: String): Int {
-        return SimpleJdbcInsert(jdbcTemplate)
-            .withTableName("words")
-            .usingGeneratedKeyColumns("id")
-            .run {
-                executeAndReturnKey(mapOf(
-                    "word" to value.lowercase(),
-                    "lang" to lang.lowercase()
-                )) as Int
+        return runCatching {
+            return NamedParameterJdbcTemplate(jdbcTemplate).queryForObject(
+                SQL_GET_WORD_BY_VALUE,
+                mapOf(
+                    "word" to value.trim().lowercase(),
+                    "lang" to lang.trim().lowercase()
+                ),
+                Int::class.java
+            )!!
+        }.getOrElse {
+            SimpleJdbcInsert(jdbcTemplate)
+                .withTableName("words")
+                .usingGeneratedKeyColumns("id")
+                .run {
+                    executeAndReturnKey(
+                        mapOf(
+                            "word" to value.trim().lowercase(),
+                            "lang" to lang.trim().lowercase()
+                        )
+                    ) as Int
+                }
         }
-
     }
 
     override fun getById(id: Int): Word? {
@@ -48,7 +61,7 @@ class WordsDaoImpl(
         return NamedParameterJdbcTemplate(jdbcTemplate).query(
             SQL_GET_WORDS_BY_LANG,
             mapOf(
-                "lang" to lang.lowercase()
+                "lang" to lang.trim().lowercase()
             )
         ) { rs, _ -> Word(
             rs.getInt("id"),

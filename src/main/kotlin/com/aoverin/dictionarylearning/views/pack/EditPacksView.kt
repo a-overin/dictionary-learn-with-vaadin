@@ -2,6 +2,7 @@ package com.aoverin.dictionarylearning.views.pack
 
 import com.aoverin.dictionarylearning.components.combobox.getComboBoxForItems
 import com.aoverin.dictionarylearning.models.Word
+import com.aoverin.dictionarylearning.models.WordsForPack
 import com.aoverin.dictionarylearning.models.WordsPack
 import com.aoverin.dictionarylearning.services.WordsPackService
 import com.aoverin.dictionarylearning.services.WordsService
@@ -23,7 +24,7 @@ class EditPacksView(
     private val wordsService: WordsService
 ) : VerticalLayout() {
 
-    private val wordsList: List<HorizontalLayout> = mutableListOf()
+    private lateinit var wordsPack: WordsForPack
     private val langLabel1 = Label("Lang one")
         .apply {
             isEnabled = false
@@ -40,7 +41,8 @@ class EditPacksView(
             setItemLabelGenerator { it.name }
             addValueChangeListener {
                 initObjects()
-                updateLabels(it.value) }
+                updateLabels(it.value)
+            }
         }
 
     private val horizontalLayout: HorizontalLayout = HorizontalLayout()
@@ -62,7 +64,7 @@ class EditPacksView(
         langLabel2.isVisible = true
         addButton.isEnabled = true
         addButton.isVisible = true
-        val wordsPack = wordsPackService.getWordsForPackId(pack.id)
+        wordsPack = wordsPackService.getWordsForPackId(pack.id)
         wordsPack.words.forEach {
             addComponentAtIndex(
                 componentCount.minus(1),
@@ -72,24 +74,6 @@ class EditPacksView(
                     }
             )
         }
-    }
-
-    private fun getDeleteButton(pack: WordsPack, word1: Word, word2: Word): Button {
-        return Button("Delete")
-            .apply {
-                addClickListener { wordsPackService.removeWordsFromPack(pack, word1, word2) }
-            }
-    }
-
-    private fun getAddButton(pack: WordsPack, word1: ComboBox<Word>, word2: ComboBox<Word>): Button {
-        return Button("Add")
-            .apply {
-                addClickListener {
-                    wordsPackService.addWordsToPack(pack, word1.value, word2.value)
-                    initObjects()
-                    updateLabels(pack)
-                }
-            }
     }
 
     private fun initObjects() {
@@ -110,11 +94,13 @@ class EditPacksView(
                         componentCount.minus(1),
                         HorizontalLayout()
                             .apply {
-                                val combo1 = getComboBoxForItems("Word", wordsService.getByLang(packBox.value.langOne))
+                                val combo1 = getComboBoxForItems("Word",
+                                    wordsService.getByLang(packBox.value.langOne).minus(wordsPack.words.map { it.first }.toList()))
                                     .apply {
                                         setItemLabelGenerator { it.value }
                                     }
-                                val combo2 = getComboBoxForItems("Word", wordsService.getByLang(packBox.value.langTwo))
+                                val combo2 = getComboBoxForItems("Word",
+                                    wordsService.getByLang(packBox.value.langTwo).minus(wordsPack.words.map { it.second }.toList()))
                                     .apply {
                                         setItemLabelGenerator { it.value }
                                     }
@@ -125,6 +111,24 @@ class EditPacksView(
                                 )
                             }
                     )
+                }
+            }
+    }
+
+    private fun getDeleteButton(pack: WordsPack, word1: Word, word2: Word): Button {
+        return Button("Delete")
+            .apply {
+                addClickListener { wordsPackService.removeWordsFromPack(pack, word1, word2) }
+            }
+    }
+
+    private fun getAddButton(pack: WordsPack, word1: ComboBox<Word>, word2: ComboBox<Word>): Button {
+        return Button("Add")
+            .apply {
+                addClickListener {
+                    wordsPackService.addWordsToPack(pack, word1.value, word2.value)
+                    initObjects()
+                    updateLabels(pack)
                 }
             }
     }
