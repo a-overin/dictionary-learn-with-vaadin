@@ -135,9 +135,13 @@ class MatchGame(
         for (i in 0 until wordsLayout.componentCount) {
             val component = wordsLayout.getComponentAt(i) as HorizontalLayout
             if (i in list) {
-                component.add(Icon(VaadinIcon.CLOSE_SMALL).apply { color = "red" })
+                val icon = Icon(VaadinIcon.CLOSE_SMALL).apply { color = "red" }
+                component.setVerticalComponentAlignment(FlexComponent.Alignment.END, icon)
+                component.add(icon)
             } else {
-                component.add(Icon(VaadinIcon.CHECK).apply { color = "green" })
+                val icon = Icon(VaadinIcon.CHECK).apply { color = "green" }
+                component.setVerticalComponentAlignment(FlexComponent.Alignment.END, icon)
+                component.add(icon)
             }
         }
     }
