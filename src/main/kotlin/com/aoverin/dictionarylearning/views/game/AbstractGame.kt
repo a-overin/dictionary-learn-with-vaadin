@@ -32,11 +32,12 @@ abstract class AbstractGame(
         this.add(createLayout(wordsPackService))
     }
 
-    protected fun checkResultAndReturnErrorElementNumber(resultSet: List<Pair<String, String>>): List<Int> {
-        val resultErrors = mutableListOf<Int>()
+    protected fun checkResultAndReturnErrorElementNumber(resultSet: List<Pair<String, String>>): List<Pair<Int, String>> {
+        val resultErrors = mutableListOf<Pair<Int, String>>()
+        val result = wordsList.toMap()
         resultSet.forEachIndexed { index, pair ->
-            if (!wordsList.any { p -> p.first == pair.first && p.second == pair.second}) {
-                resultErrors.add(index)
+            if (result[pair.first] != pair.second) {
+                resultErrors.add(Pair(index, result[pair.first]!!))
             }
         }
         return resultErrors

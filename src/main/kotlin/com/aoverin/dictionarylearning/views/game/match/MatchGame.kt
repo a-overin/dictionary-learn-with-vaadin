@@ -3,6 +3,7 @@ package com.aoverin.dictionarylearning.views.game.match
 import com.aoverin.dictionarylearning.services.WordsPackService
 import com.aoverin.dictionarylearning.views.MainLayout
 import com.aoverin.dictionarylearning.views.game.AbstractGame
+import com.vaadin.flow.component.Text
 import com.vaadin.flow.component.dnd.DragSource
 import com.vaadin.flow.component.dnd.DropEffect
 import com.vaadin.flow.component.dnd.DropTarget
@@ -131,13 +132,15 @@ class MatchGame(
         return stringList
     }
 
-    private fun drawResult(list: List<Int>) {
+    private fun drawResult(list: List<Pair<Int, String>>) {
+        val results = list.toMap()
         for (i in 0 until wordsLayout.componentCount) {
             val component = wordsLayout.getComponentAt(i) as HorizontalLayout
-            if (i in list) {
+            if (results.containsKey(i)) {
                 val icon = Icon(VaadinIcon.CLOSE_SMALL).apply { color = "red" }
                 component.setVerticalComponentAlignment(FlexComponent.Alignment.END, icon)
                 component.add(icon)
+                component.add(Text("(${results[i]})"))
             } else {
                 val icon = Icon(VaadinIcon.CHECK).apply { color = "green" }
                 component.setVerticalComponentAlignment(FlexComponent.Alignment.END, icon)
