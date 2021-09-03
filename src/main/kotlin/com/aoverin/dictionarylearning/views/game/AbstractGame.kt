@@ -9,6 +9,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.router.RoutePrefix
 import com.vaadin.flow.server.auth.AnonymousAllowed
+import kotlin.streams.toList
 
 @RoutePrefix(value = "game")
 @AnonymousAllowed
@@ -36,7 +37,7 @@ abstract class AbstractGame(
         val resultErrors = mutableListOf<Pair<Int, String>>()
         val result = wordsList.toMap()
         resultSet.forEachIndexed { index, pair ->
-            if (result[pair.first] != pair.second) {
+            if (result[pair.first.trim().lowercase()]?.trim()?.lowercase() != pair.second.trim().lowercase()) {
                 resultErrors.add(Pair(index, result[pair.first]!!))
             }
         }
@@ -59,7 +60,16 @@ abstract class AbstractGame(
                     )
                 }
             }
-            initComponents(wordsList)
+            initComponents(
+                wordsList.stream()
+                .map { e -> e.first }
+                .toList()
+                .shuffled(),
+                wordsList.stream()
+                .map { e -> e.second }
+                .toList()
+                .shuffled()
+            )
         } else {
             disableComponents()
             showResult()
@@ -122,7 +132,7 @@ abstract class AbstractGame(
 
     abstract fun hideComponents()
 
-    abstract fun initComponents(words: List<Pair<String, String>>)
+    abstract fun initComponents(wordsTarget: List<String>, wordsSource: List<String>)
 
     abstract fun showResult()
 }
