@@ -7,9 +7,9 @@ import com.vaadin.flow.component.combobox.ComboBox
 import com.vaadin.flow.component.orderedlayout.FlexComponent
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
+import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.router.RoutePrefix
 import com.vaadin.flow.server.auth.AnonymousAllowed
-import kotlin.streams.toList
 
 @RoutePrefix(value = "game")
 @AnonymousAllowed
@@ -26,6 +26,7 @@ abstract class AbstractGame(
     private val button = Button("Start")
     private val buttonLangFirst = Button("lang type one")
     private val buttonLangSecond = Button("lang type second")
+    private val wordsCountToShow = IntegerField("words count")
     private lateinit var wordsList: List<Pair<String, String>>
     private var langType = false
 
@@ -35,10 +36,10 @@ abstract class AbstractGame(
 
     protected fun checkResultAndReturnErrorElementNumber(resultSet: List<Pair<String, String>>): List<Pair<Int, String>> {
         val resultErrors = mutableListOf<Pair<Int, String>>()
-        val result = wordsList.toMap()
         resultSet.forEachIndexed { index, pair ->
-            if (result[pair.first.trim().lowercase()]?.trim()?.lowercase() != pair.second.trim().lowercase()) {
-                resultErrors.add(Pair(index, result[pair.first]!!))
+            val founded = wordsList[index]
+            if (founded.first != pair.first.trim().lowercase() || founded.second != pair.second.trim().lowercase()) {
+                resultErrors.add(Pair(index, founded.second))
             }
         }
         return resultErrors
@@ -60,15 +61,10 @@ abstract class AbstractGame(
                     )
                 }
             }
+            wordsList = wordsList.shuffled().take(wordsCountToShow.value)
             initComponents(
-                wordsList.stream()
-                .map { e -> e.first }
-                .toList()
-                .shuffled(),
-                wordsList.stream()
-                .map { e -> e.second }
-                .toList()
-                .shuffled()
+                wordsList.map { e -> e.first },
+                wordsList.map { e -> e.second }.shuffled()
             )
         } else {
             disableComponents()
@@ -88,6 +84,8 @@ abstract class AbstractGame(
             addValueChangeListener {
                 buttonLangFirst.isVisible = true
                 buttonLangSecond.isVisible = true
+                wordsCountToShow.isVisible = true
+                wordsCountToShow.value = minOf(wordsCountToShow.max, wordsCountToShow.value)
                 buttonLangFirst.text = "${it.value.langOne} -> ${it.value.langTwo}"
                 buttonLangSecond.text = "${it.value.langTwo} -> ${it.value.langOne}"
             }
@@ -113,7 +111,13 @@ abstract class AbstractGame(
             isVisible = false
             addClassName(checkButtonClass)
         }
-        layout.add(comboBox, button, buttonLangFirst, buttonLangSecond)
+        wordsCountToShow.apply {
+            isVisible = false
+            min = 1
+            value = 1
+            setHasControls(true)
+        }
+        layout.add(comboBox, button, buttonLangFirst, buttonLangSecond, wordsCountToShow)
         for (i in 0 until layout.componentCount) {
             layout.setVerticalComponentAlignment(FlexComponent.Alignment.BASELINE, layout.getComponentAt(i))
         }
@@ -124,6 +128,7 @@ abstract class AbstractGame(
         comboBox.isEnabled = !flag
         buttonLangFirst.isEnabled = !flag
         buttonLangSecond.isEnabled = !flag
+        wordsCountToShow.isEnabled = !flag
         button.text = if (flag) "Check" else "Start"
         gameStarted = flag
     }
