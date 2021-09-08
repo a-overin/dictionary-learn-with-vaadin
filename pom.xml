@@ -11,7 +11,7 @@
 	<properties>
 		<java.version>11</java.version>
 		<kotlin.version>1.5.21</kotlin.version>
-		<vaadin.version>22.0.0.alpha1</vaadin.version>
+		<vaadin.version>21.0.0</vaadin.version>
 	</properties>
 
 	<parent>
@@ -28,12 +28,6 @@
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
-		</repository>
-		<repository>
-			<id>vaadin-prereleases</id>
-			<url>
-				https://maven.vaadin.com/vaadin-prereleases/
-			</url>
 		</repository>
 		<!-- Repository used by many Vaadin add-ons -->
 		<repository>
