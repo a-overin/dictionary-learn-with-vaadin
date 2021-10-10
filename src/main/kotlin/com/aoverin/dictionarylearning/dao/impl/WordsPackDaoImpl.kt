@@ -80,7 +80,7 @@ class WordsPackDaoImpl(
         return WordsForPack(id, result)
     }
 
-    override fun addWordsToPack(packID: Int, wordId: Int) {
+    override fun addWordToPack(packID: Int, wordId: Int) {
         SimpleJdbcInsert(jdbcTemplate)
             .withTableName("words2group")
             .execute(mapOf(

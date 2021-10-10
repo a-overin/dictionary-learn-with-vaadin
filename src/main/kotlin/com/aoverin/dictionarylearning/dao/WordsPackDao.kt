@@ -9,7 +9,7 @@ interface WordsPackDao {
 
     fun getWordsForPackId(id: Int): WordsForPack
 
-    fun addWordsToPack(packID: Int, wordId: Int)
+    fun addWordToPack(packID: Int, wordId: Int)
 
     fun removeWordsFromPack(packID: Int, wordId: Int)
 

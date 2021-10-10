@@ -12,7 +12,7 @@ interface WordsPackService {
 
     fun createNewPack(pack: WordsPack)
 
-    fun addWordsToPack(pack: WordsPack, word1: Word, words2: Word)
+    fun addWordsToPack(pack: WordsPack, vararg words: Word?)
 
     fun removeWordsFromPack(pack: WordsPack, word1: Word, words2: Word)
 }

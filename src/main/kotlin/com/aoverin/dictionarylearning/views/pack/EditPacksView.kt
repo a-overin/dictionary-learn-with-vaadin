@@ -150,7 +150,11 @@ class EditPacksView(
         return Button("Add")
             .apply {
                 addClickListener {
-                    wordsPackService.addWordsToPack(pack, word1.value, word2.value)
+                    wordsPackService.addWordsToPack(
+                        pack,
+                        if (!word1.isEmpty) word1.value else null,
+                        if (!word2.isEmpty) word2.value else null
+                    )
                     initObjects()
                     updateLabels(pack)
                 }
