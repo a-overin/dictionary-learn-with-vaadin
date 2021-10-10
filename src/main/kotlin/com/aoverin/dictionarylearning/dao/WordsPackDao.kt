@@ -12,4 +12,6 @@ interface WordsPackDao {
     fun addWordsToPack(packID: Int, wordId: Int)
 
     fun removeWordsFromPack(packID: Int, wordId: Int)
+
+    fun createPack(name: String, lang1: String, lang2: String) : Int
 }

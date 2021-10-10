@@ -10,6 +10,8 @@ interface WordsPackService {
 
     fun getWordsForPackId(id: Int): WordsForPack
 
+    fun createNewPack(pack: WordsPack)
+
     fun addWordsToPack(pack: WordsPack, word1: Word, words2: Word)
 
     fun removeWordsFromPack(pack: WordsPack, word1: Word, words2: Word)

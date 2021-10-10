@@ -98,4 +98,18 @@ class WordsPackDaoImpl(
             )
         )
     }
+
+    override fun createPack(name: String, lang1: String, lang2: String): Int {
+        return SimpleJdbcInsert(jdbcTemplate)
+            .withTableName("word_group_main")
+            .usingGeneratedKeyColumns("id")
+            .executeAndReturnKey(
+                mapOf(
+                    "name" to name,
+                    "lang1" to lang1,
+                    "lang2" to lang2
+                )
+            )
+            .toInt()
+    }
 }

@@ -9,9 +9,11 @@ import com.aoverin.dictionarylearning.services.WordsService
 import com.aoverin.dictionarylearning.views.MainLayout
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.combobox.ComboBox
+import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.html.Label
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
+import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.router.PageTitle
 import com.vaadin.flow.router.Route
 import javax.annotation.security.RolesAllowed
@@ -24,7 +26,18 @@ class EditPacksView(
     private val wordsService: WordsService
 ) : VerticalLayout() {
 
+    private val packTable = Grid<WordsPack>(WordsPack::class.java)
+
+    private val addPackLayout = VerticalLayout()
+        .apply {
+            val textField = TextField("pack name")
+            val lang1 = getComboBoxForItems("Lang1", wordsService.getLanguages())
+            val lang2 = getComboBoxForItems("Lang1", wordsService.getLanguages())
+            add(textField, lang1, lang2, getCreatePackButton(textField, lang1, lang2))
+        }
+
     private lateinit var wordsPack: WordsForPack
+
     private val langLabel1 = Label("Lang one")
         .apply {
             isEnabled = false
@@ -78,6 +91,17 @@ class EditPacksView(
 
     private fun initObjects() {
         removeAll()
+        add(HorizontalLayout(
+            VerticalLayout(packTable
+                .apply {
+                    setItems(wordsPackService.getAllPack())
+                }
+            ),
+            addPackLayout
+        )
+            .apply {
+                setSizeFull()
+            })
         add(packBox)
         add(horizontalLayout)
         add(addButton)
@@ -129,6 +153,19 @@ class EditPacksView(
                     wordsPackService.addWordsToPack(pack, word1.value, word2.value)
                     initObjects()
                     updateLabels(pack)
+                }
+            }
+    }
+
+    private fun getCreatePackButton(name: TextField, lang1: ComboBox<String>, lang2: ComboBox<String>): Button {
+        return Button("Add")
+            .apply {
+                addClickListener {
+                    wordsPackService.createNewPack(WordsPack(-1, name.value, lang1.value, lang2.value))
+                    name.clear()
+                    lang1.clear()
+                    lang2.clear()
+                    initObjects()
                 }
             }
     }

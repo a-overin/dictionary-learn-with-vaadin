@@ -19,6 +19,10 @@ class WordsPackServiceImpl(
         return wordsPackDao.getWordsForPackId(id)
     }
 
+    override fun createNewPack(pack: WordsPack) {
+        wordsPackDao.createPack(pack.name, pack.langOne, pack.langTwo)
+    }
+
     override fun addWordsToPack(pack: WordsPack, word1: Word, words2: Word) {
         wordsPackDao.addWordsToPack(pack.id, word1.id)
         wordsPackDao.addWordsToPack(pack.id, words2.id)
